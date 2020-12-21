@@ -1,0 +1,27 @@
+[SETTINGS]
+{
+  "Name": "ADN",
+  "SuggestedBots": 1,
+  "LastModified": "2019-04-21T20:06:01.2839697+02:00",
+  "AdditionalInfo": "",
+  "Author": "Vienn",
+  "Version": "1.0.2",
+  "IgnoreResponseErrors": false,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]

